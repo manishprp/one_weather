@@ -1,4 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'city_name_from_coords_bloc.dart';
+import 'current_page_bloc.dart';
 import 'citites_bloc.dart';
 import 'coordinates_bloc.dart';
 import 'current_index_bloc.dart';
@@ -29,5 +31,11 @@ blocInstances() => [
       ),
       BlocProvider<CurrentIndexBloc>(
         create: (context) => CurrentIndexBloc(),
+      ),
+      BlocProvider<CurrentPageBloc>(
+        create: (context) => CurrentPageBloc(),
+      ),
+      BlocProvider<CityNameFromCoordsBloc>(
+        create: (context) => CityNameFromCoordsBloc(),
       ),
     ];

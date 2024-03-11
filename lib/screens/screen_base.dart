@@ -5,11 +5,11 @@ import '../widgets/loader_widget.dart';
 import '../bloc/internet_bloc.dart';
 
 class ScreenBase extends StatelessWidget {
-  ScreenBase(
+  const ScreenBase(
       {super.key, required this.child, required this.onInternetConnected});
   final Widget child;
-  bool internetConnected = false;
-  Function onInternetConnected;
+  final bool internetConnected = false;
+  final Function onInternetConnected;
 
   @override
   Widget build(BuildContext context) {

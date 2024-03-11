@@ -1,6 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:one_weather/bloc/weather_bloc.dart';
 
 import '../api/api_client.dart';
 import '../api/weather_endpoint.dart';
@@ -13,7 +15,13 @@ part 'multi_weather_state.dart';
 class MultiWeatherBloc extends Bloc<MultiWeatherEvent, MultiWeatherState> {
   MultiWeatherBloc() : super(MultiWeatherInitial()) {
     on<MultipleWeatherFetchedEvent>(_multipleWeatherFetches);
+    on<MultipleWeatherDeletedEvent>(_multiweatherDeleted);
   }
+}
+
+FutureOr<void> _multiweatherDeleted(
+    MultipleWeatherDeletedEvent event, Emitter<MultiWeatherState> emit) {
+  for (int i = 0; i < event.indexeToDelete.length; i++) {}
 }
 
 _multipleWeatherFetches(
@@ -26,7 +34,7 @@ _multipleWeatherFetches(
   try {
     for (int i = 0; i < data.length; i++) {
       var response = await WeatherEndpointProvider(client)
-          .fetchCurrentWeather(data[i].latitude ?? 0, data[i].longitude ?? 0);
+          .fetchCurrentWeather(data[i].latitude, data[i].longitude);
       if (response.data != null) {
         var data = weatherResponseFromJson(response.data);
         finalData.add(data);

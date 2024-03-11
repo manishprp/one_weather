@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:one_weather/themes/app_space_constants.dart';
+import 'package:one_weather/themes/asset_strings.dart';
+import '../themes/app_space_constants.dart';
 
 import '../themes/app_colors.dart';
 import '../themes/textstyles.dart';
@@ -39,11 +40,21 @@ class DataCardWidget extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 AppSpaceConstants.kGapH10,
-                Icon(
-                  Icons.temple_hindu_sharp,
-                  color: AppColors.iconColor,
-                  size: 28,
+
+                SizedBox(
+                  height: 40,
+                  width: 40,
+                  child: Image.asset(
+                    icon ?? AssetIcons.temperature,
+                    fit: BoxFit.contain,
+                    color: AppColors.textColor,
+                  ),
                 ),
+                // Icon(
+                //   Icons.temple_hindu_sharp,
+                //   color: AppColors.iconColor,
+                //   size: 28,
+                // ),
                 AppSpaceConstants.kGapH5,
               ],
             ),

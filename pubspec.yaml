@@ -14,11 +14,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   carousel_slider: ^4.2.1
   dio: ^5.4.1
-  location: ^5.0.3
   flutter_bloc: ^8.1.4
   connectivity: ^3.0.6
   geolocator: ^11.0.0
   geocoding: ^2.2.0
+  lottie: ^3.1.0
 
 
 dev_dependencies:
@@ -26,17 +26,18 @@ dev_dependencies:
     sdk: flutter
 
 
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
 
 
 flutter:
-
-
   uses-material-design: true
-
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+   - lib/assets/humidity.png
+   - lib/assets/pressure.png
+   - lib/assets/rain.png
+   - lib/assets/temperature.png
+   - lib/assets/wind.png
+   - lib/assets/visibility.png
 
 
   # fonts:

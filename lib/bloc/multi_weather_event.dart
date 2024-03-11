@@ -8,3 +8,9 @@ class MultipleWeatherFetchedEvent extends MultiWeatherEvent {
 
   MultipleWeatherFetchedEvent(this.data);
 }
+
+class MultipleWeatherDeletedEvent extends MultiWeatherEvent {
+  final List<int> indexeToDelete;
+
+  MultipleWeatherDeletedEvent(this.indexeToDelete);
+}

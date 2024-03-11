@@ -6,7 +6,7 @@ sealed class LocationState {}
 final class LocationInitial extends LocationState {}
 
 final class LocationSuccess extends LocationState {
-  final LocationData data;
+  final LocationModel data;
   LocationSuccess(this.data);
 }
 

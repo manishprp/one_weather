@@ -21,10 +21,15 @@
             "flutterMode": "profile"
         },
         {
-            "name": "one_weather (release mode)",
+            "name": "Release",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "program": "lib/screens/main.dart",
+            "flutterMode": "release",
+            "args": [
+                "--target",
+                "lib/screens/main.dart",
+            ],
         }
     ]
 }

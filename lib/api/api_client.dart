@@ -2,10 +2,10 @@ import "package:dio/dio.dart";
 
 class APIClient {
   Dio init() {
-    var _dio = Dio();
+    var dio = Dio();
     // _dio.interceptors.add(new ApiInterceptors());
-    _dio.options.baseUrl = "https://api.openweathermap.org/";
-    return _dio;
+    dio.options.baseUrl = "https://api.openweathermap.org/";
+    return dio;
   }
 }
 

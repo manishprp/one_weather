@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:location/location.dart';
+import '../model/location_model.dart';
 import '../location_service/location_setup.dart';
 
 part 'location_event.dart';
@@ -15,7 +15,8 @@ class LocationBloc extends Bloc<LocationFetched, LocationState> {
 void _fetchCurrentLocation(
     LocationFetched event, Emitter<LocationState> emit) async {
   try {
-    var locationdata = await getUserLocation();
+    var locationdata = await getCurrentLocation();
+    // ignore: unnecessary_null_comparison
     if (locationdata != null) {
       emit(LocationSuccess(locationdata));
     } else {

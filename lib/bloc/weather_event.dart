@@ -4,7 +4,7 @@ part of 'weather_bloc.dart';
 sealed class WeatherEvents {}
 
 class WeatherFetchedEvent extends WeatherEvents {
-  final LocationData data;
+  final LocationModel data;
 
   WeatherFetchedEvent(this.data);
 }

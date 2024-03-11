@@ -1,7 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:location/location.dart';
 import '../bloc/citites_bloc.dart';
 import '../bloc/current_index_bloc.dart';
 import '../bloc/multi_weather_bloc.dart';
@@ -20,15 +19,16 @@ import 'city_weather_screen.dart';
 var degreeSymbol = AppString.degreeSymbol;
 var colors = AppColors();
 var textStyles = AppTextStyle();
-LocationData? data;
+LocationModel? data;
 List<LocationModel> locationModels = [];
 String pageTitle = "";
+CarouselController _carouselController = CarouselController();
+String curentCityName = "";
 
 final List<Widget> items = [];
 
 class WeatherHomePage extends StatefulWidget {
-  const WeatherHomePage({super.key, required this.title});
-  final String title;
+  const WeatherHomePage({super.key});
   @override
   State<WeatherHomePage> createState() => _WeatherHomePageState();
 }
@@ -42,7 +42,8 @@ class _WeatherHomePageState extends State<WeatherHomePage> {
   }
 
   void getLocation() async {
-    data = await getUserLocation();
+    data = await getCurrentLocation();
+    // ignore: use_build_context_synchronously
     context.read<InternetBloc>().add(CheckInternetEvent());
   }
 
@@ -52,17 +53,21 @@ class _WeatherHomePageState extends State<WeatherHomePage> {
       body: ScreenBase(
         onInternetConnected: () => {
           locationModels = context.watch<CititesBloc>().state,
-          context.read<CititesBloc>().add(
-                CityAddedEvent(
-                  LocationModel(data!.latitude!, data!.longitude!, "Silvassa"),
-                ),
-              ),
+          if (locationModels.isEmpty)
+            {
+              context.read<CititesBloc>().add(
+                    CityAddedEvent(
+                        LocationModel(data!.latitude, data!.longitude, ""),
+                        onTop: true),
+                  ),
+            },
           context.read<MultiWeatherBloc>().add(
-                MultipleWeatherFetchedEvent(context.watch<CititesBloc>().state),
+                MultipleWeatherFetchedEvent(locationModels),
               ),
         },
         child: BlocBuilder<MultiWeatherBloc, MultiWeatherState>(
           builder: (context, state) {
+            locationModels = context.watch<CititesBloc>().state;
             if (state is MultipleWeatherLoading) {
               return const LoaderWidget();
             }
@@ -79,15 +84,22 @@ class _WeatherHomePageState extends State<WeatherHomePage> {
                 physics: const BouncingScrollPhysics(),
                 slivers: [
                   CustomAppBar(
-                      dotCount: locationModels,
-                      title: locationModels[
-                                  context.watch<CurrentIndexBloc>().state]
+                      pageChanged: (index) => {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              _carouselController.jumpToPage(index);
+                            })
+                          },
+                      dotCount: context.watch<CititesBloc>().state,
+                      title: context
+                              .watch<CititesBloc>()
+                              .state[context.watch<CurrentIndexBloc>().state]
                               .cityName ??
                           ""),
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
                         return CarouselSlider(
+                          carouselController: _carouselController,
                           items: data
                               .map(
                                 (e) => CityWeatherWidget(
@@ -96,7 +108,9 @@ class _WeatherHomePageState extends State<WeatherHomePage> {
                               )
                               .toList(),
                           options: CarouselOptions(
-                              aspectRatio: 0.30,
+                              initialPage:
+                                  context.watch<CurrentIndexBloc>().state,
+                              aspectRatio: 0.28,
                               viewportFraction: 1.0,
                               enlargeCenterPage: false,
                               reverse: false,

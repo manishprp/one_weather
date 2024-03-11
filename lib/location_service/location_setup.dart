@@ -1,35 +1,30 @@
-import 'package:location/location.dart';
+import 'package:geolocator/geolocator.dart';
+import '../model/location_model.dart';
 
-// Function to get user location
-Future<LocationData?> getUserLocation() async {
-  late bool _serviceEnabled;
-  late PermissionStatus _permissionGranted;
-  Location location = Location();
-  LocationData? locationData;
+LocationModel locationModel = LocationModel(0, 0, "");
+Future<LocationModel> getCurrentLocation() async {
   try {
-    // Check if location service is enabled
-    _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
-      if (!_serviceEnabled) {
-        return locationData;
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next step is to inform the user and guide
+        // them to the settings page.
+        return locationModel;
       }
     }
 
-    // Check if permission is granted
-    _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
-        return locationData;
-      }
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return locationModel;
     }
 
-    // Get the user's location
-    locationData = await location.getLocation();
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    return LocationModel(position.latitude, position.longitude, "");
   } catch (e) {
-    return locationData;
+    return locationModel;
   }
-
-  return locationData;
 }

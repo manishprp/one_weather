@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:location/location.dart';
+import '../model/location_model.dart';
 import '../api/api_client.dart';
 
 import '../api/weather_endpoint.dart';
@@ -19,8 +19,7 @@ _weatherFetch(WeatherFetchedEvent event, Emitter<WeatherState> emit) async {
   try {
     emit(WeatherLoading());
     var response = await WeatherEndpointProvider(APIClient().init())
-        .fetchCurrentWeather(
-            event.data.latitude ?? 0, event.data.longitude ?? 0);
+        .fetchCurrentWeather(event.data.latitude, event.data.longitude);
     if (response.data != null) {
       var data = weatherResponseFromJson(response.data);
       emit(WeatherSuccess(data));

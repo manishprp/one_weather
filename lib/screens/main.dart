@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/bloc_instances.dart';
+import '../routes/routes.dart';
 import '../themes/app_colors.dart';
 import '../themes/textstyles.dart';
 import 'weather_homepage.dart';
@@ -17,21 +18,22 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: blocInstances(),
       child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'One_Weather',
-          theme: ThemeData(
-            scaffoldBackgroundColor: AppColors.primaryColor,
-            appBarTheme: const AppBarTheme(
-              centerTitle: false,
-            ),
-            textTheme: const TextTheme(
-              bodyLarge: AppTextStyle.kFs25,
-            ),
-            colorScheme:
-                ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
-            useMaterial3: true,
+        routes: Routes.routes,
+        debugShowCheckedModeBanner: false,
+        title: 'One_Weather',
+        theme: ThemeData(
+          scaffoldBackgroundColor: AppColors.primaryColor,
+          appBarTheme: const AppBarTheme(
+            centerTitle: false,
           ),
-          home: WeatherHomePage(title: "Silvassa")),
+          textTheme: const TextTheme(
+            bodyLarge: AppTextStyle.kFs25,
+          ),
+          colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
+          useMaterial3: true,
+        ),
+        home: const WeatherHomePage(),
+      ),
     );
   }
 }
